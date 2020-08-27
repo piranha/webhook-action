@@ -2,15 +2,13 @@ var core = require('@actions/core');
 var https = require('https');
 
 
-function post(url, method, headers, body) {
-  if (!headers) headers = {};
-  if (!headers['Content-Type']) headers['Content-Type'] = 'application/json';
-
+function request(input) {
   return new Promise((resolve, reject) => {
+    core.debug('Sending request: ' + JSON.stringify(input));
+
     var req = https.request(
-      url,
-      {method: method || 'POST',
-       headers: headers || {'Content-Type': 'application/json'}},
+      input.url, {method:  input.method,
+                  headers: input.headers},
       (response) => {
         var data = [];
         response.on('data', (chunk) => data.push(chunk));
@@ -23,7 +21,9 @@ function post(url, method, headers, body) {
           }
         });
       });
-    req.write(body);
+    if (input.body) {
+      req.write(input.body);
+    }
     req.on('error', reject);
     req.end();
   });
@@ -31,16 +31,20 @@ function post(url, method, headers, body) {
 
 
 function main() {
-  var url = core.getInput('url');
-  var method = core.getInput('method');
-  var headers = core.getInput('headers');
-  var data = core.getInput('data');
+  var input = {url:     core.getInput('url'),
+               method:  core.getInput('method') || 'POST',
+               headers: core.getInput('headers') || {},
+               body:    core.getInput('body'),
+               debug:   !!core.getInput('debug')};
 
-  if (!url) {
+  if (!input.url) {
     throw new Error('`url` is required');
   }
 
-  return post(url, method, headers, data)
+  if (!input.headers['Content-Type'])
+    input.headers['Content-Type'] = 'application/json';
+
+  return request(input)
     .catch((err) => core.setFailed('status: ' + err.status + ', body: ' + err.body))
     .then(() => core.debug(`done in ${process.uptime()}s`));
 }
