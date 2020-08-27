@@ -1,0 +1,14 @@
+{
+  "name": "less-deps-webhook-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexander Solovyov",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.2.4"
+  }
+}

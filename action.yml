@@ -1,0 +1,22 @@
+name: 'JS Webhook Action'
+author: 'Alexander Solovyov'
+description: 'Minimal dependencies webhook action'
+branding:
+  icon: 'arrow-up-right'
+  color: 'orange'
+inputs:
+  url:
+    description: 'Request will be sent here'
+    required: true
+  method:
+    description: 'Request method to be executed, default: POST'
+    required: false
+  headers:
+    description: 'Additional headers, default: Content-Type: application/json'
+    required: false
+  body:
+    description: 'Any string to be sent as a request body'
+    required: false
+runs:
+  using: 'node12'
+  main: 'index.js'
