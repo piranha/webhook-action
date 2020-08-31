@@ -34,8 +34,7 @@ function main() {
   var input = {url:     core.getInput('url'),
                method:  core.getInput('method') || 'POST',
                headers: core.getInput('headers') || {},
-               body:    core.getInput('body'),
-               debug:   !!core.getInput('debug')};
+               body:    core.getInput('body')};
 
   if (!input.url) {
     throw new Error('`url` is required');
