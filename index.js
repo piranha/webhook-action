@@ -1,4 +1,5 @@
 var core = require('@actions/core');
+var http = require('http');
 var https = require('https');
 
 
@@ -6,14 +7,17 @@ function request(input) {
   return new Promise((resolve, reject) => {
     core.debug('Sending request: ' + JSON.stringify(input));
 
-    var req = https.request(
+    var impl = input.url.startsWith('https:') ? https : http;
+
+    var req = impl.request(
       input.url, {method:  input.method,
                   headers: input.headers},
       (response) => {
         var data = [];
         response.on('data', (chunk) => data.push(chunk));
         response.on('end', () => {
-          var result = {status: response.statusCode, body: data.join('')};
+          var result = {status: response.statusCode,
+                        body:   data.join('')};
           if (response.statusCode < 200 || response.statusCode > 299) {
             reject(result);
           } else {
@@ -21,9 +25,11 @@ function request(input) {
           }
         });
       });
+
     if (input.body) {
       req.write(input.body);
     }
+
     req.on('error', reject);
     req.end();
   });
