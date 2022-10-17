@@ -1,6 +1,6 @@
 {
   "name": "less-deps-webhook-action",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "author": "Alexander Solovyov",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.4"
+    "@actions/core": "^1.10.0"
   }
 }
