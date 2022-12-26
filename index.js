@@ -48,6 +48,9 @@ function main() {
 
   if (!input.headers['Content-Type'])
     input.headers['Content-Type'] = 'application/json';
+  
+  if (!input.headers['Content-Length'] && input.body)
+    input.headers['Content-Length'] = Buffer.byteLength(input.body)
 
   return request(input)
     .catch((err) => core.setFailed('status: ' + err.status + ', body: ' + err.body))
